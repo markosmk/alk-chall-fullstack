@@ -5,7 +5,7 @@ const operationModel = require('../components/operation/model');
 const db = {};
 
 async function initialize() {
-  const { hostname, port, user, password, database } = config;
+  const { hostname, user, password, database } = config;
 
   const sequelize = new Sequelize(database, user, password, {
     host: hostname,
