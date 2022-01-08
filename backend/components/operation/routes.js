@@ -1,12 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const operationController = require('./controller');
+const { getAll, getById, createOne, updateOne, deleteOne } = require('./controller');
 
 // routes
-router.get('/', operationController.getAll); // to listed
-router.get('/:id', operationController.getById); // to edit - to show data
-router.post('/', operationController.createOne); // to create new
-router.put('/:id', operationController.updateOne); // to action update
-router.delete('/:id', operationController.deleteOne); // to action delete
+router.get('/', getAll); // to listed
+router.get('/:id', getById); // to edit - to show data
+router.post('/', createOne); // to create new
+router.put('/:id', updateOne); // to action update
+router.delete('/:id', deleteOne); // to action delete
 
 module.exports = router;
