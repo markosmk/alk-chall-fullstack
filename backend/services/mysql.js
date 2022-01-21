@@ -13,10 +13,11 @@ async function initialize() {
   });
 
   try {
-    sequelize.authenticate();
+    await sequelize.authenticate();
     console.log('Conectado a la base de datos.');
   } catch (error) {
-    console.error('No se pudo conectar:', error);
+    console.error('No se pudo conectar:', error.message);
+    return;
   }
 
   db.Operation = operationModel(sequelize);
