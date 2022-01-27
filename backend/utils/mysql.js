@@ -1,6 +1,9 @@
 const config = require('../config');
 const { Sequelize } = require('sequelize');
-const operationModel = require('../components/operation/model');
+
+// all Models
+const userModel = require('../components/user/model.user');
+const operationModel = require('../components/operation/model.operation');
 
 const db = {};
 
@@ -19,7 +22,8 @@ async function initialize() {
     console.error('No se pudo conectar:', error.message);
     return;
   }
-
+  // asign Models
+  db.User = userModel(sequelize);
   db.Operation = operationModel(sequelize);
 
   await sequelize.sync({ force: false }).then(() => {
