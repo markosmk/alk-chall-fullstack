@@ -1,4 +1,4 @@
-const db = require('../../services/mysql');
+const db = require('../../utils/mysql');
 
 async function getAll(req, res, next) {
   /**
@@ -8,18 +8,10 @@ async function getAll(req, res, next) {
    * el resultante de los ingresos y egresos de dinero cargados,
    * un listado de los últimos 10 registrados.
    */
-  const { limit, order, type, category } = req.query;
-  let options = { where: {} };
-  if (limit || order || type || category) {
-    if (limit) options.limit = Number(limit);
-    if (order) options.order = [['createdAt', order]];
-    if (type) options.where.type = type;
-    if (category) options.where.category = category;
-  }
 
   try {
-    const operations = await db.Operation.findAll(options);
-    res.json({ operations });
+    const users = await db.User.findAll();
+    res.json({ users });
   } catch (error) {
     next(error);
   }
@@ -31,8 +23,8 @@ async function getById(req, res, next) {
   }
 
   try {
-    const operation = await getOperation(req.params.id);
-    return res.json({ operation });
+    const user = await getUser(req.params.id);
+    return res.json({ user });
   } catch (error) {
     next(error);
   }
@@ -41,10 +33,10 @@ async function getById(req, res, next) {
 async function createOne(req, res, next) {
   // TODO: validar informacion
   try {
-    const operation = new db.Operation(req.body);
-    // operation.date = Date.now();
-    operation.date = new Date(req.body.date);
-    await operation.save();
+    const user = new db.User(req.body);
+    // user.date = Date.now();
+    user.date = new Date(req.body.date);
+    await user.save();
 
     res.json({ status: 'Guardado Correctamente', operation });
   } catch (error) {
@@ -62,11 +54,11 @@ async function updateOne(req, res, next) {
   }
 
   try {
-    const operation = await getOperation(id);
-    Object.assign(operation, filteredData);
-    await operation.save();
+    const user = await getUser(id);
+    Object.assign(user, filteredData);
+    await user.save();
 
-    res.json({ status: 'Actualizado Correctamente', operation });
+    res.json({ status: 'Actualizado Correctamente', user });
   } catch (error) {
     next(error);
   }
@@ -80,18 +72,18 @@ async function deleteOne(req, res, next) {
   const id = req.params.id;
 
   try {
-    const operation = await getOperation(id);
-    await operation.destroy();
-    res.json({ message: 'Operacion eliminada' });
+    const user = await getUser(id);
+    await user.destroy();
+    res.json({ message: 'Usuario eliminado' });
   } catch (error) {
     next(error);
   }
 }
 
 // helper functions
-async function getOperation(id) {
-  const data = await db.Operation.findByPk(id);
-  if (!data) throw 'Operacion no encontrada';
+async function getUser(id) {
+  const data = await db.User.findByPk(id);
+  if (!data) throw 'Usuario no encontrado';
   return data;
 }
 

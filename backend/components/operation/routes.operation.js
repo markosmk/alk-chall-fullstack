@@ -1,6 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const { getAll, getById, createOne, updateOne, deleteOne } = require('./controller');
+const {
+  getAll,
+  getById,
+  createOne,
+  updateOne,
+  deleteOne,
+} = require('./controller.operation');
 
 // routes
 router.get('/', getAll); // to listed
