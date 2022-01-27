@@ -1,4 +1,4 @@
-const db = require('../../services/mysql');
+const db = require('../../utils/mysql');
 
 async function getAll(req, res, next) {
   /**
