@@ -3,7 +3,7 @@ const { jwt_secret } = require('../config');
 
 const createToken = ({ email, id }, expiresIn = 60 * 60) => {
   return new Promise((resolve, reject) => {
-    if (!email || id) return reject('datos invalidos');
+    if (!email || !id) return reject('datos invalidos');
 
     return sign(
       { email, id },
