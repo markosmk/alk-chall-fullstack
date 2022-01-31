@@ -6,7 +6,7 @@ const {
   createOne,
   updateOne,
   deleteOne,
-} = require('./controller.operation');
+} = require('./operation.controller');
 
 // routes
 router.get('/', getAll); // to listed

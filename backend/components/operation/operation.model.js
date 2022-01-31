@@ -19,14 +19,29 @@ function model(sequelize) {
       type: DataTypes.DATE,
       allowNull: false,
     },
-    category: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     type: {
       type: DataTypes.ENUM('ingreso', 'egreso'),
       allowNull: false,
     },
+    // Relation handle in ApplyExtraOptions,
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     // Operations belongsTo one User
+    //     model: 'Users',
+    //     key: 'id',
+    //   },
+    // },
+    // categoryId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: false,
+    //   references: {
+    //     // Operation belongsTo one Category
+    //     model: 'Users',
+    //     key: 'id',
+    //   },
+    // },
   };
 
   const options = {};
