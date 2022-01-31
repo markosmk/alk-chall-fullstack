@@ -1,35 +1,39 @@
-import Header from './components/Header';
-import { AuthProvider, useAuth } from './context';
+import { BrowserRouter } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
 import Router from './routes';
-import { useNavigate, useLocation, Navigate, Outlet } from 'react-router-dom';
+import Header from './components/Header';
+import { logout } from './context/reducers/authSlice';
+
+import './App.css';
 
 function App() {
   return (
-    <AuthProvider>
+    <BrowserRouter>
       <AuthStatus />
       <Header />
       <Router />
-    </AuthProvider>
+    </BrowserRouter>
   );
 }
 
 function AuthStatus() {
-  let auth = useAuth();
-  let navigate = useNavigate();
+  const { isLoggedIn, user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
-  if (!auth.user) {
-    return <p>You are not logged in.</p>;
+  if (!isLoggedIn) {
+    return <p>No has iniciado sesion.</p>;
   }
 
   return (
     <p>
-      Welcome {auth.user}!{' '}
+      Bienvenido <strong>{user?.email}!</strong>
       <button
         onClick={() => {
-          auth.signout(() => navigate('/'));
+          dispatch(logout());
         }}
       >
-        Sign out
+        Salir
       </button>
     </p>
   );
