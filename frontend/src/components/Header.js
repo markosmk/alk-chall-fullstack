@@ -1,33 +1,30 @@
 import { Link } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+
+// actions
+import { logout } from '../context/reducers/authSlice';
+
 const Header = () => {
+  const { isLoggedIn } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   return (
-    <>
-      <nav
-        style={{
-          display: 'flex',
-          gap: '10px',
-          padding: '1rem',
-          border: 'solid 2px #aaa',
-          borderRadius: '8px',
-        }}
-      >
-        <Link to="/">Inicio</Link>
-        <Link to="/panel">Panel</Link>
-        <Link to="/panel/user">Info Usuario</Link>
-        <Link to="/panel/categories">Categorias</Link>
-        <div
-          style={{
-            display: 'flex',
-            gap: '10px',
-            marginLeft: 'auto',
-          }}
-        >
-          <Link to="/login">Iniciar Sesion</Link>
-          <Link to="/register">Registro</Link>
-          <Link to="/logout">Salir</Link>
+    <header>
+      <nav>
+        {!isLoggedIn && <Link to="/">Inicio</Link>}
+        {isLoggedIn && (
+          <>
+            <Link to="/">Panel</Link>
+            <Link to="/user">Info Usuario</Link>
+            <Link to="/categories">Categorias</Link>
+          </>
+        )}
+        <div className="nav-right">
+          {!isLoggedIn && <Link to="/login">Iniciar Sesion</Link>}
+          {!isLoggedIn && <Link to="/register">Registrarse</Link>}
+          {isLoggedIn && <button onClick={() => dispatch(logout())}>Salir</button>}
         </div>
       </nav>
-    </>
+    </header>
   );
 };
 
