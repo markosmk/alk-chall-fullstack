@@ -50,7 +50,7 @@ async function createOne(req, res, next) {
     newOperation.amount = checkCorrectSign(req); // correct the sign amount
     console.log();
     // await newOperation.save();
-    res.json({ status: 'Guardado Correctamente', operation: newOperation });
+    res.json({ message: 'Guardado Correctamente', operation: newOperation });
   } catch (error) {
     next(error);
   }
@@ -66,7 +66,7 @@ async function updateOne(req, res, next) {
     const operation = await getDataOne(models.Operation, { where: { id, userId } });
     Object.assign(operation, filteredData);
     await operation.save();
-    res.json({ status: 'Actualizado Correctamente', operation });
+    res.json({ message: 'Actualizado Correctamente', operation });
   } catch (error) {
     next(error);
   }
@@ -75,8 +75,8 @@ async function updateOne(req, res, next) {
 async function deleteOne(req, res, next) {
   const { id: userId } = req.user;
   try {
-    const id = await getIdParam(req); // status(401)
-    const deleteOperation = await getDataOne(models.Operation, { where: { id, userId } }); // status(404)
+    const id = await getIdParam(req);
+    const deleteOperation = await getDataOne(models.Operation, { where: { id, userId } });
     await deleteOperation.destroy();
     res.json({ message: 'Operacion eliminada', operation: deleteOperation });
   } catch (error) {

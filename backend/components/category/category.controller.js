@@ -5,19 +5,30 @@ const { getIdParam, getDataOne } = require('../../utils/helpers');
 async function getAll(req, res, next) {
   const { id: userId } = req.user;
   try {
-    const categories = await models.Category.findAll({ where: { userId } });
+    const categories = await models.Category.findAll({
+      where: { userId },
+    });
     res.json({ categories });
   } catch (error) {
     next(error);
   }
 }
 
-// get info categoria and all operations relationated
+// get info categoria and all operations relationated with query values
 async function getById(req, res, next) {
+  const { withOperations } = req.query;
   const { id: userId } = req.user;
   try {
     const id = await getIdParam(req);
-    const category = await getDataOne(models.Category, { where: { id, userId } });
+    const category = await getDataOne(models.Category, {
+      where: { id, userId },
+    });
+    if (withOperations) {
+      const operations = await models.Operation.findAll({
+        where: { categoryId: id, userId },
+      });
+      return res.json({ category, operations });
+    }
     return res.json({ category });
   } catch (error) {
     next(error);
@@ -31,7 +42,7 @@ async function createOne(req, res, next) {
 
   try {
     const newCategory = await models.Category.create({ name, userId });
-    res.json({ status: 'Guardado Correctamente', category: newCategory });
+    res.status(201).json({ message: 'Guardado Correctamente', category: newCategory });
   } catch (error) {
     next(error);
   }
@@ -47,7 +58,7 @@ async function updateOne(req, res, next) {
     const category = await getDataOne(models.Category, { where: { id, userId } });
     category.name = name;
     await category.save();
-    res.json({ status: 'Actualizado Correctamente', category });
+    res.json({ message: 'Actualizado Correctamente', category });
   } catch (error) {
     next(error);
   }
@@ -56,8 +67,8 @@ async function updateOne(req, res, next) {
 async function deleteOne(req, res, next) {
   const { id: userId } = req.user;
   try {
-    const id = await getIdParam(req); // status(401)
-    const deleteItem = await getDataOne(models.Category, { where: { id, userId } }); // status(404)
+    const id = await getIdParam(req);
+    const deleteItem = await getDataOne(models.Category, { where: { id, userId } });
     await deleteItem.destroy();
     res.json({ message: 'Categoria eliminada', category: deleteItem });
   } catch (error) {

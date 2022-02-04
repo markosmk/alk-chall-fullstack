@@ -1,7 +1,7 @@
 const express = require('express');
 const cors = require('cors');
-const handleError = require('./utils/handleError');
 const router = require('./router');
+const { errorLogger, errorHandler } = require('./middlewares/handleError');
 
 const app = express();
 
@@ -12,6 +12,7 @@ app.use(cors());
 app.use('/api/v1/', router);
 
 // errors
-app.use(handleError);
+app.use(errorLogger);
+app.use(errorHandler);
 
 app.listen(8000);
