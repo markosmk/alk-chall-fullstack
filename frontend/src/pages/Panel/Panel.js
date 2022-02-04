@@ -1,64 +1,15 @@
-import { useEffect, useState } from 'react';
-
-const initForm = {
-  concept: '',
-  amount: '',
-  date: '',
-  type: '',
-};
+import { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import { getOperations } from '../../context/reducers/operationSlice';
+// import FormOperation from './FormOperation';
 
 const Panel = () => {
-  const [info, setInfo] = useState('');
-  const [operations, setOperations] = useState([]);
-  const [form, setForm] = useState(initForm);
+  const { list: operations, isLoading } = useSelector((state) => state.operation);
+  const dispatch = useDispatch();
 
-  async function getData() {
-    try {
-      const data = await fetch('http://localhost:8000/operations');
-      const result = await data.json();
-      if (result) {
-        console.log(result.data);
-        setOperations(result.data);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
   useEffect(() => {
-    getData();
-  }, []);
-
-  const handleSubmit = async (ev) => {
-    ev.preventDefault();
-
-    try {
-      const response = await fetch('http://localhost:8000/operations', {
-        method: 'POST',
-        body: JSON.stringify(form),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      const result = await response.json();
-      if (result) {
-        console.log(result);
-        setInfo(result);
-        setForm(initForm);
-      }
-    } catch (error) {
-      console.log(error);
-    }
-
-    console.log(form);
-  };
-
-  const handleForm = (ev) => {
-    const { name, value } = ev.target;
-    setForm({
-      ...form,
-      [name]: value,
-    });
-  };
+    dispatch(getOperations());
+  }, [dispatch]);
 
   return (
     <div>
@@ -67,7 +18,10 @@ const Panel = () => {
 
       <h1>Operaciones Existentes</h1>
       <ul>
-        {operations &&
+        {isLoading ? (
+          <>Cargando...</>
+        ) : (
+          operations &&
           operations.map((item) => {
             return (
               <li key={item.id}>
@@ -76,39 +30,12 @@ const Panel = () => {
                 </p>
               </li>
             );
-          })}
+          })
+        )}
       </ul>
       <hr />
       <h1>Agregar Operacion</h1>
-      <p>Message: {JSON.stringify(info)}</p>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="">Concepto</label>
-        <input
-          type="text"
-          name="concept"
-          value={form.concept}
-          onChange={handleForm}
-          required
-        />
-
-        <label htmlFor="">Monto</label>
-        <input type="number" name="amount" value={form.amount} onChange={handleForm} />
-
-        <label htmlFor="">Fecha</label>
-        <input type="date" name="date" value={form.date} onChange={handleForm} />
-
-        <label htmlFor="">Tipo</label>
-        <select name="type" value={form.type} onChange={handleForm}>
-          <option value="">--- Seleccionar ---</option>
-          <option value="ingreso">Ingreso</option>
-          <option value="egreso">Egreso</option>
-        </select>
-
-        <button>Enviar</button>
-      </form>
-
-      <h2>Resultado:</h2>
-      <pre>{JSON.stringify(form)}</pre>
+      {/* <FormOperation /> */}
     </div>
   );
 };
