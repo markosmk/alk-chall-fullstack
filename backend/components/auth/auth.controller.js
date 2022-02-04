@@ -1,6 +1,7 @@
 const { models } = require('../../utils/sequelize');
 const { createToken } = require('../../utils/jwt');
 const { AppError } = require('../../utils/errors');
+
 async function loginUser(req, res, next) {
   const { email, password } = req.body;
 
