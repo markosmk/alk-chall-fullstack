@@ -1,6 +1,14 @@
 import { useRoutes, Outlet } from 'react-router-dom';
 
-import { Panel, User, Categories, Login, NotFound } from '../pages';
+import {
+  Panel,
+  User,
+  Categories,
+  Login,
+  NotFound,
+  Operations,
+  CreateOperation,
+} from '../pages';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
 
@@ -17,6 +25,9 @@ const Router = () => {
             { index: true, element: <Panel /> },
             { path: 'user', element: <User /> },
             { path: 'categories', element: <Categories /> },
+            { path: 'operations', element: <Operations /> },
+            { path: 'operations/new', element: <CreateOperation /> },
+            { path: 'operations/:id/edit', element: <CreateOperation /> },
           ],
         },
         {

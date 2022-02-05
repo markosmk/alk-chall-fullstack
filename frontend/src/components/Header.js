@@ -14,8 +14,9 @@ const Header = () => {
         {isLoggedIn && (
           <>
             <Link to="/">Panel</Link>
-            <Link to="/user">Info Usuario</Link>
+            <Link to="/operations">Operations</Link>
             <Link to="/categories">Categorias</Link>
+            <Link to="/user">Info Usuario</Link>
           </>
         )}
         <div className="nav-right">
