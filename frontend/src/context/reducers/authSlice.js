@@ -48,8 +48,8 @@ export const setLogin = () => {
   };
 };
 
-export const logout = createAsyncThunk('auth/logout', async () => {
-  await authService.logout();
+export const logout = createAsyncThunk('auth/logout', () => {
+  authService.logout();
 });
 
 const user =
