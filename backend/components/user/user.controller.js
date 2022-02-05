@@ -31,11 +31,16 @@ async function createOne(req, res, next) {
 
 async function getById(req, res, next) {
   const { id } = req.user;
+
+  const { operations, categories } = req.query;
+  let options = { where: { id }, include: [] };
+  if (operations || categories) {
+    if (operations) options.include = [...options.include, 'Operations'];
+    if (categories) options.include = [...options.include, 'Categories'];
+  }
+
   try {
-    const user = await getDataOne(models.User, {
-      where: { id },
-      include: ['Operations', 'Categories'],
-    });
+    const user = await getDataOne(models.User, options);
     return res.json({ user });
   } catch (error) {
     next(error);
