@@ -1,4 +1,6 @@
 const { models } = require('../../utils/sequelize');
+const { Op } = require('sequelize');
+// const Op = Sequelize.Op;
 const { checkCorrectSign, getIdParam, getDataOne } = require('../../utils/helpers');
 
 async function getAll(req, res, next) {
@@ -11,12 +13,12 @@ async function getAll(req, res, next) {
    * un listado de los últimos 10 registrados.
    */
   const { limit, order, type, category } = req.query;
-  let options = { where: { userId } };
+  let options = { where: { userId }, include: ['Category'] };
   if (limit || order || type || category) {
     if (limit) options.limit = Number(limit);
     if (order) options.order = [['createdAt', order]];
     if (type) options.where.type = type;
-    if (category) options.where.categoryId = category;
+    if (category) options.where.categoryId = category > 0 ? category : { [Op.is]: null };
   }
   try {
     const operations = await models.Operation.findAll(options);
@@ -48,7 +50,6 @@ async function createOne(req, res, next) {
     newOperation.date = new Date(req.body.date); // convert datatime 2022-01-27 01:01:44
     newOperation.userId = userId;
     newOperation.amount = checkCorrectSign(req); // correct the sign amount
-    console.log();
     // await newOperation.save();
     res.json({ message: 'Guardado Correctamente', operation: newOperation });
   } catch (error) {
