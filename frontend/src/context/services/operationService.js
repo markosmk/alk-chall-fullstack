@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const getAllOperations = () => {
-  return axios.get('/operations');
+const getAllOperations = (query = '') => {
+  return axios.get('/operations' + query);
 };
 
 const getOneOperation = (operationId) => {
