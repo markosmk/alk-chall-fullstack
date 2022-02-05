@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import operationService from '../services/operationService';
 
+import { logout } from './authSlice';
+
 const initialState = {
   list: [],
   isLoading: true,
@@ -27,17 +29,22 @@ const operationSlice = createSlice({
       state.error = action.payload;
     },
   },
+  extraReducers: {
+    [logout.fulfilled]: (state, action) => {
+      return initialState;
+    },
+  },
 });
 
 export const { setOperations, setLoading, setErrors } = operationSlice.actions;
 
 export default operationSlice.reducer;
 
-export const getOperations = () => {
+export const getOperations = (query) => {
   return async (dispatch) => {
     try {
       dispatch(setLoading());
-      const resp = await operationService.getAllOperations();
+      const resp = await operationService.getAllOperations(query);
 
       setTimeout(() => {
         if (resp) {

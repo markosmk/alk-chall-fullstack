@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit';
 import categoryService from '../services/categoryService';
 
+import { logout } from './authSlice';
+
 const initialState = {
   list: [],
   isLoading: null,
@@ -13,6 +15,11 @@ const categorySlice = createSlice({
   reducers: {
     setCategories: (state, action) => {
       state.list = action.payload;
+    },
+  },
+  extraReducers: {
+    [logout.fulfilled]: (state, action) => {
+      return initialState;
     },
   },
 });
