@@ -34,10 +34,11 @@ const applyExtraOptions = (sequelize) => {
   });
 
   /**
-  One-To-One relation
+  
+  One-To-Many relation
   */
   // Relation Category has many operations
-  Category.hasOne(Operation, {
+  Category.hasMany(Operation, {
     foreignKey: {
       name: 'categoryId',
     },
