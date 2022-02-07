@@ -22,10 +22,14 @@ const getDataOne = async (Model, options = {}) => {
 };
 
 // check type, if 'ingreso' or 'egreso' to check correct sign before save
-const checkCorrectSign = ({ body: { type, amount } }) => {
+// if type is 'ingreso' must be sign +, so if enter -3 or '-3' must save 3
+// if type is 'egreso' must be sign -, so if enter 3 or '3', you must save -3
+const checkCorrectSign = ({ body: { type, amount } }, typeDB = '') => {
+  const typeSelect = typeDB ? typeDB : type;
   if (
-    (type === 'egreso' && Math.sign(amount) === 1) ||
-    (type === 'ingreso' && Math.sign(amount) === -1)
+    // check if egreso sign is positive or ingreso is negative, so change sign
+    (typeSelect === 'egreso' && Math.sign(amount) === 1) ||
+    (typeSelect === 'ingreso' && Math.sign(amount) === -1)
   ) {
     return -amount;
   }
