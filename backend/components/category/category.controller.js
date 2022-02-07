@@ -1,12 +1,28 @@
 const { models } = require('../../utils/sequelize');
+const sequelize = require('sequelize');
 const { getIdParam, getDataOne } = require('../../utils/helpers');
 
 // get all categories of user in session
 async function getAll(req, res, next) {
+  const { withOperations } = req.query;
   const { id: userId } = req.user;
   try {
     const categories = await models.Category.findAll({
       where: { userId },
+      include: withOperations ? 'Operations' : [],
+      attributes: {
+        // include: [
+        //   [sequelize.fn('sum', sequelize.col('Operations.amount')), 'category_balance'],
+        // ],
+        include: [
+          [
+            sequelize.literal(
+              '(SELECT sum(Operations.amount) FROM Operations WHERE Operations.categoryId=Category.id)'
+            ),
+            'category_balance',
+          ],
+        ],
+      },
     });
     res.json({ categories });
   } catch (error) {
@@ -16,19 +32,40 @@ async function getAll(req, res, next) {
 
 // get info categoria and all operations relationated with query values
 async function getById(req, res, next) {
-  const { withOperations } = req.query;
   const { id: userId } = req.user;
   try {
     const id = await getIdParam(req);
     const category = await getDataOne(models.Category, {
       where: { id, userId },
+      // subQuery: false,
+      include: ['Operations'],
+      attributes: {
+        // include: [
+        //   [sequelize.fn('sum', sequelize.col('Operations.amount')), 'totalAmount'],
+        // ],
+        include: [
+          [
+            sequelize.literal(
+              '(SELECT sum(Operations.amount) FROM Operations WHERE Operations.categoryId=Category.id)'
+            ),
+            'category_balance',
+          ],
+          [
+            sequelize.literal(
+              '(SELECT sum(Operations.amount) FROM Operations WHERE Operations.categoryId=Category.id AND Operations.type="egreso")'
+            ),
+            'category_egreso',
+          ],
+          [
+            sequelize.literal(
+              '(SELECT sum(Operations.amount) FROM Operations WHERE Operations.categoryId=Category.id AND Operations.type="ingreso")'
+            ),
+            'category_ingreso',
+          ],
+        ],
+      },
+      // group: ['Operations.amount', 'Operations.id'],
     });
-    if (withOperations) {
-      const operations = await models.Operation.findAll({
-        where: { categoryId: id, userId },
-      });
-      return res.json({ category, operations });
-    }
     return res.json({ category });
   } catch (error) {
     next(error);
