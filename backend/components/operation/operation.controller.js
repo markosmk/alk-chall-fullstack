@@ -50,7 +50,7 @@ async function createOne(req, res, next) {
     newOperation.date = new Date(req.body.date); // convert datatime 2022-01-27 01:01:44
     newOperation.userId = userId;
     newOperation.amount = checkCorrectSign(req); // correct the sign amount
-    // await newOperation.save();
+    await newOperation.save();
     res.json({ message: 'Guardado Correctamente', operation: newOperation });
   } catch (error) {
     next(error);
@@ -66,6 +66,9 @@ async function updateOne(req, res, next) {
     const id = await getIdParam(req);
     const operation = await getDataOne(models.Operation, { where: { id, userId } });
     Object.assign(operation, filteredData);
+    if (req.body.amount) {
+      operation.amount = checkCorrectSign(req, operation.type); // correct the sign amount
+    }
     await operation.save();
     res.json({ message: 'Actualizado Correctamente', operation });
   } catch (error) {
