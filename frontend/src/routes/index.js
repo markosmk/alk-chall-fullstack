@@ -1,4 +1,5 @@
-import { useRoutes, Outlet } from 'react-router-dom';
+import { useRoutes } from 'react-router-dom';
+import Layout from '../components/Layout';
 
 import {
   Panel,
@@ -8,6 +9,7 @@ import {
   NotFound,
   Operations,
   CreateOperation,
+  Register,
 } from '../pages';
 import PrivateRoute from './PrivateRoute';
 import PublicRoute from './PublicRoute';
@@ -30,23 +32,19 @@ const Router = () => {
             { path: 'operations/:id/edit', element: <CreateOperation /> },
           ],
         },
-        {
-          path: '/',
-          element: <PublicRoute />,
-          children: [
-            { path: 'login', element: <Login /> },
-            { path: 'register', element: <Login /> },
-            // { path: '*', element: <Navigate to="/404" /> },
-          ],
-        },
-        // { path: '*', element: <Navigate to="/404" replace /> },
-        { path: '*', element: <NotFound /> },
       ],
     },
+    {
+      path: '/',
+      element: <PublicRoute />,
+      children: [
+        { path: 'login', element: <Login /> },
+        { path: 'register', element: <Register /> },
+        // { path: '*', element: <Navigate to="/404" /> },
+      ],
+    },
+    // { path: '*', element: <Navigate to="/404" replace /> },
+    { path: '*', element: <NotFound /> },
   ]);
 };
 export default Router;
-
-const Layout = () => {
-  return <Outlet />;
-};
