@@ -10,9 +10,7 @@ const PublicRoute = () => {
     // Redirect to previous url from saved or route '/' if user is logged
     <Navigate to={from} />
   ) : (
-    <div className="public">
-      <Outlet />
-    </div>
+    <Outlet />
   );
 };
 
