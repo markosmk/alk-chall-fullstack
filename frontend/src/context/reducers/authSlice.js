@@ -1,21 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import authService from '../services/authService';
-// import { setMessage } from './message';
+import { setMessage } from './messageSlice';
 
 export const register = createAsyncThunk(
   'auth/register',
   async ({ name, email, password }, thunkAPI) => {
     try {
       const response = await authService.register(name, email, password);
-      // thunkAPI.dispatch(setMessage(response.data.message));
+      thunkAPI.dispatch(setMessage(response.data.message));
       return response.data;
     } catch (error) {
       const message =
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      console.log(message);
-      // thunkAPI.dispatch(setMessage(message));
+      console.log('error en registro', message);
+      thunkAPI.dispatch(setMessage(message));
       return thunkAPI.rejectWithValue();
     }
   }
@@ -33,12 +33,16 @@ export const login = createAsyncThunk(
         (error.response && error.response.data && error.response.data.message) ||
         error.message ||
         error.toString();
-      console.log(message);
-      // thunkAPI.dispatch(setMessage(message));
+      console.log('error en login', message);
+      thunkAPI.dispatch(setMessage(message));
       return thunkAPI.rejectWithValue();
     }
   }
 );
+
+export const logout = createAsyncThunk('auth/logout', () => {
+  authService.logout();
+});
 
 export const setLogin = () => {
   return (dispatch, getState) => {
@@ -47,10 +51,6 @@ export const setLogin = () => {
     dispatch(setAuth(user));
   };
 };
-
-export const logout = createAsyncThunk('auth/logout', () => {
-  authService.logout();
-});
 
 const user =
   localStorage.getItem('user') && JSON.parse(localStorage.getItem('user')).user;

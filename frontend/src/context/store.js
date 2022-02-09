@@ -1,15 +1,16 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer from './reducers/authSlice';
 import categorySlice from './reducers/categorySlice';
+import messageSlice from './reducers/messageSlice';
 import operationSlice from './reducers/operationSlice';
 import userSlice from './reducers/userSlice';
 
-const combinedReducer = combineReducers({
-  auth: authReducer,
-  category: categorySlice,
-  operation: operationSlice,
-  user: userSlice,
-});
+// const combinedReducer = combineReducers({
+//   auth: authReducer,
+//   category: categorySlice,
+//   operation: operationSlice,
+//   user: userSlice,
+// });
 
 // const rootReducer = (state, action) => {
 //   if (action.type === 'counter/logout') {
@@ -24,6 +25,7 @@ export const store = configureStore({
     category: categorySlice,
     operation: operationSlice,
     user: userSlice,
+    message: messageSlice,
   },
   middleware: (getDefaultMiddleware) => [...getDefaultMiddleware()],
   devTools: true,
