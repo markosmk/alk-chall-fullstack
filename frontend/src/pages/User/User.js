@@ -1,6 +1,9 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getInfoUser } from '../../context/reducers/userSlice';
+import Spinner from '../../components/Spinner';
+import FormUser from './FormUser';
+import FormPassword from './FormPassword';
 
 const User = () => {
   const { userData, isLoading } = useSelector((state) => state.user);
@@ -11,14 +14,26 @@ const User = () => {
   }, [dispatch]);
 
   return (
-    <div>
-      <h1>Usuario</h1>
+    <>
+      <div className="max-w-7xl mx-auto py-16 px-4 sm:px-6 lg:px-8 bg-white rounded-lg mb-6">
+        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">
+          Mi Cuenta
+        </h1>
+      </div>
+
       {isLoading ? (
-        <pre>Cargando Datos...</pre>
+        <Spinner />
       ) : (
-        <pre>{userData && JSON.stringify(userData, null, ' ')}</pre>
+        <>
+          <pre>{userData && JSON.stringify(userData, null, ' ')}</pre>
+
+          <div className="space-y-6">
+            <FormUser user={userData} />
+            <FormPassword />
+          </div>
+        </>
       )}
-    </div>
+    </>
   );
 };
 
