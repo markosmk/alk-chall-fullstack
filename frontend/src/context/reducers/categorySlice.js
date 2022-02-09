@@ -28,10 +28,10 @@ export const { setCategories } = categorySlice.actions;
 export const getAllCategories = (state) => state.category.categories;
 export default categorySlice.reducer;
 
-export const getCategories = () => {
+export const getCategories = (query) => {
   return async (dispatch) => {
     try {
-      const resp = await categoryService.getAllCategories();
+      const resp = await categoryService.getAllCategories(query);
       if (resp) {
         dispatch(setCategories(resp.data.categories));
       }

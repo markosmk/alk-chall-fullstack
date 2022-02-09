@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-const getAllCategories = () => {
-  return axios.get('/categories');
+const getAllCategories = (query = '') => {
+  return axios.get('/categories' + query);
 };
 
 const getOneCategory = (categoryId) => {
