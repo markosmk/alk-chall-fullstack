@@ -2,6 +2,7 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import authReducer from './reducers/authSlice';
 import categorySlice from './reducers/categorySlice';
 import messageSlice from './reducers/messageSlice';
+import modalSlice from './reducers/modalSlice';
 import operationSlice from './reducers/operationSlice';
 import userSlice from './reducers/userSlice';
 
@@ -26,6 +27,7 @@ export const store = configureStore({
     operation: operationSlice,
     user: userSlice,
     message: messageSlice,
+    modal: modalSlice,
   },
   middleware: (getDefaultMiddleware) => [...getDefaultMiddleware()],
   devTools: true,
