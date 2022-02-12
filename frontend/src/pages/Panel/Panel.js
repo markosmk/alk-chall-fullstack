@@ -1,75 +1,34 @@
-import { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import ItemOperation from '../../components/ItemOperation';
+import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 
-import { getOperations } from '../../context/reducers/operationSlice';
-// import FormOperation from './FormOperation';
+import { openModal } from '../../context/reducers/modalSlice';
+import Filters from '../../components/Filters';
+import ListOperations from '../../components/ListOperations';
 
 const Panel = () => {
-  const { list: operations, isLoading } = useSelector((state) => state.operation);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(getOperations());
-  }, [dispatch]);
-
-  const handleCreateNew = () => {
-    console.log('CrearNuevo :');
-  };
 
   return (
     <div>
-      <h1>Balance</h1>
-      <p>Muestra la tabla de los ingresos y egresos de/los usuarios</p>
-      <p>
-        Balance: <strong>$12300.00</strong>
-      </p>
-      <h1>Ultimas 10 operaciones</h1>
-      <div
-        style={{
-          backgroundColor: '#eee',
-          padding: '10px',
-          borderRadius: '8px',
-          marginBottom: '15px',
-        }}
-      >
-        <h3>Opciones/Filtros</h3>
-        <label for="last">Filtro Cantidad</label>
-        <select name="" id="last">
-          <option value="">Ultimos 10</option>
-          <option value="">Ultimos 20</option>
-          <option value="">Ultimos 30</option>
-        </select>
-        <label for="order">Ordenar por fecha</label>
-        <select name="" id="order">
-          <option value="">Mas Recientes primero</option>
-          <option value="">Mas Antiguas primero</option>
-        </select>
-        <label for="type">Filtro por tipo</label>
-        <select name="" id="type">
-          <option value="">Ingreso</option>
-          <option value="">Egreso</option>
-        </select>
-        <label for="type">Filtro por categoria</label>
-        <select name="" id="type">
-          <option value="">Todas</option>
-          <option value="">Sin Categoria</option>
-          <option value="">Categoria 1</option>
-          <option value="">Categoria 2</option>
-        </select>
+      <div className="mx-auto max-w-7xl rounded-t-lg bg-white py-16 px-4 sm:px-6 lg:px-8">
+        <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">Balance</h1>
+        <p className="mt-4 max-w-xl text-sm text-gray-700">
+          Muestra la tabla de los ingresos y egresos de/los usuarios
+        </p>
+        <p>
+          Balance: <strong>$12300.00</strong>
+        </p>
+        <button
+          className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+          onClick={() => dispatch(openModal())}
+        >
+          Crear Nueva Operacion
+        </button>
       </div>
-      <button onClick={handleCreateNew}>Crear Nueva Operacion</button>
-      <ul>
-        {isLoading ? (
-          <>Cargando...</>
-        ) : (
-          operations &&
-          operations.map((item) => {
-            return <ItemOperation key={item.id} item={item} />;
-          })
-        )}
-      </ul>
-      {/* <FormOperation /> */}
+      {/* <Filters /> */}
+      <p className="py-4 px-4 text-gray-400 sm:px-6">Ultimas 10 operaciones</p>
+
+      <ListOperations />
     </div>
   );
 };
