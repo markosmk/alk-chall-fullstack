@@ -11,9 +11,6 @@ async function getAll(req, res, next) {
       where: { userId },
       include: withOperations ? 'Operations' : [],
       attributes: {
-        // include: [
-        //   [sequelize.fn('sum', sequelize.col('Operations.amount')), 'category_balance'],
-        // ],
         include: [
           [
             sequelize.literal(
@@ -24,6 +21,23 @@ async function getAll(req, res, next) {
         ],
       },
     });
+
+    const operationsNull = await models.Operation.findAll({
+      where: { userId, categoryId: null },
+    });
+    if (operationsNull.length > 0) {
+      const balanceOfOperationsNull = await models.Operation.sum('amount', {
+        where: { userId, categoryId: null },
+      }); // added null category
+      categories.push({
+        id: 0,
+        name: 'Sin Categoria',
+        userId,
+        category_balance: balanceOfOperationsNull.toString(), // para mantener el mismo tipo de dato
+        Operations: operationsNull,
+      });
+    }
+
     res.json({ categories });
   } catch (error) {
     next(error);
