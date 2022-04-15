@@ -1,20 +1,15 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { closeModal } from '../context/reducers/modalSlice';
 
-const ModalForm = ({ title, children }) => {
-  const dispatch = useDispatch();
-  const { isOpen } = useSelector((state) => state.modal);
+const ModalForm = ({ title, children, handleClose, isOpen, isSmall }) => {
   return (
     <>
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
           as="div"
           className="fixed inset-0 z-50 overflow-y-auto"
-          onClose={() => dispatch(closeModal())}
+          onClose={handleClose}
         >
-          {/* <Dialog.Overlay /> */}
           <div className="min-h-screen px-4 text-center">
             <Transition.Child
               as={Fragment}
@@ -25,7 +20,7 @@ const ModalForm = ({ title, children }) => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0" />
+              <Dialog.Overlay className="fixed inset-0 bg-slate-600 bg-opacity-40" />
             </Transition.Child>
 
             {/* This element is to trick the browser into centering the modal contents. */}
@@ -41,7 +36,11 @@ const ModalForm = ({ title, children }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <div className="inline-block w-full max-w-xl p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <div
+                className={`my-8 inline-block w-full ${
+                  isSmall ? 'max-w-sm' : 'max-w-xl'
+                } transform overflow-hidden rounded-xl bg-white p-6 text-left align-middle shadow-xl transition-all`}
+              >
                 <Dialog.Title
                   as="h3"
                   className="text-xl font-semibold leading-6 text-black"
