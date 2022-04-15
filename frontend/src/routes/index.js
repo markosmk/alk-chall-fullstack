@@ -8,7 +8,7 @@ import {
   Login,
   NotFound,
   Operations,
-  CreateOperation,
+  CreateOrUpdateOperation,
   Register,
 } from '../pages';
 import PrivateRoute from './PrivateRoute';
@@ -28,8 +28,8 @@ const Router = () => {
             { path: 'user', element: <User /> },
             { path: 'categories', element: <Categories /> },
             { path: 'operations', element: <Operations /> },
-            { path: 'operations/new', element: <CreateOperation /> },
-            { path: 'operations/:id/edit', element: <CreateOperation /> },
+            { path: 'operations/new', element: <CreateOrUpdateOperation /> },
+            { path: 'operations/:id/edit', element: <CreateOrUpdateOperation /> },
           ],
         },
       ],
@@ -40,10 +40,8 @@ const Router = () => {
       children: [
         { path: 'login', element: <Login /> },
         { path: 'register', element: <Register /> },
-        // { path: '*', element: <Navigate to="/404" /> },
       ],
     },
-    // { path: '*', element: <Navigate to="/404" replace /> },
     { path: '*', element: <NotFound /> },
   ]);
 };

@@ -1,17 +1,12 @@
-import { Outlet, Navigate, useLocation } from 'react-router-dom';
+import { Outlet, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 
 const PublicRoute = () => {
-  const { isLoggedIn } = useSelector((state) => state.auth);
-  const location = useLocation();
-  const from = location.state?.from?.pathname || '/';
-
-  return isLoggedIn ? (
-    // Redirect to previous url from saved or route '/' if user is logged
-    <Navigate to={from} />
-  ) : (
-    <Outlet />
-  );
+  const { user } = useSelector((state) => state.auth);
+  // const location = useLocation();
+  // const from = location.state?.from?.pathname || '/';
+  // Redirect to previous url from saved or route '/' if user is logged
+  return user ? <Navigate to="/" /> : <Outlet />;
 };
 
 export default PublicRoute;
