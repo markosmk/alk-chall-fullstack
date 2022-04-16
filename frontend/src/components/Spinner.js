@@ -1,9 +1,11 @@
 // https://flowbite.com/docs/components/spinner/
-const Spinner = ({ centered }) => {
+const Spinner = ({ centered, size = 'h-8 w-8', dark }) => {
   const spinnerSvg = (
     <svg
       role="status"
-      className="mr-2 h-8 w-8 animate-spin fill-black text-gray-200 dark:text-gray-600"
+      className={`mr-2 ${size} animate-spin ${
+        dark ? 'fill-white text-gray-600' : 'fill-black text-gray-200'
+      } dark:text-gray-600`}
       viewBox="0 0 100 101"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
