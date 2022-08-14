@@ -1,0 +1,69 @@
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Categories {
+  id         Int              @id @default(autoincrement())
+  name       String           @db.VarChar(255)
+  type       Categories_type?
+  icon       String?          @db.VarChar(50)
+  userId     Int
+  createdAt  DateTime?        @default(now()) @db.DateTime(0)
+  author     Users            @relation(fields: [userId], references: [id], onDelete: Cascade, map: "categories_ibfk_1")
+  operations Operations[]
+
+  @@index([userId], map: "userId")
+}
+
+model Operations {
+  id         Int              @id @default(autoincrement())
+  userId     Int
+  categoryId Int?
+  concept    String           @db.VarChar(255)
+  amount     Decimal          @db.Decimal(10, 2)
+  date       DateTime         @db.DateTime(0)
+  type       Operations_type?
+  createdAt  DateTime         @default(now()) @db.DateTime(0)
+  updatedAt  DateTime         @updatedAt @db.DateTime(0)
+  author     Users            @relation(fields: [userId], references: [id], onDelete: Cascade, map: "operations_ibfk_1")
+  categories Categories?      @relation(fields: [categoryId], references: [id], map: "operations_ibfk_2")
+
+  @@index([categoryId], map: "categoryId")
+  @@index([userId], map: "userId")
+  @@fulltext([concept], map: "concept")
+}
+
+model Users {
+  id         Int          @id @default(autoincrement())
+  name       String       @db.VarChar(255)
+  email      String       @unique(map: "email") @db.VarChar(255)
+  password   String       @db.VarChar(255)
+  role       Users_role   @default(user)
+  tokenReset String?      @db.VarChar(255)
+  resetAt    DateTime?    @db.DateTime(0)
+  createdAt  DateTime     @default(now()) @db.DateTime(0)
+  updatedAt  DateTime     @updatedAt @db.DateTime(0)
+  categories Categories[]
+  operations Operations[]
+}
+
+enum Categories_type {
+  ingreso
+  gasto
+}
+
+enum Users_role {
+  admin
+  user
+}
+
+enum Operations_type {
+  ingreso
+  gasto
+}
